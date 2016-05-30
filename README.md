@@ -6,7 +6,7 @@ FMCW radars are used in military applications where it is important to "see with
 
 The "processing gain" is achieved by a technique called "stretch processing" [Caputi 1971](http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=4103696). The received and transmitted signals - which mostly overlap in time - are mixed together produce an "intermediate frequency" (IF) or "beat" signal at the difference of their respective frequencies. Provided that the frequency of the transmitted signal increases linearly with time (such a signal is called a linear "chirp"), the "beat" frequency for a single target is constant and proportional to its range.
 
-![FMCW radar principle](/Images/FMCW_schematic_SPIE.png)
+![FMCW radar principle](/Images/FMCW_schematic_SPIE.png = 250x)
 
 The problem is that it is technically difficult to transmit a perfectly linear chirp. Deviations from chirp linearity cause the beat frequency to not be constant, resulting in loss of range resolution and possibly the presence of 'false targets' in the beat spectrum. Even if we know the form of the nonlinearity, the distortions in the beat signal are dependent on the range of target, which is not known a priori.
 
