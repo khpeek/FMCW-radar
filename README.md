@@ -8,6 +8,9 @@ The "processing gain" is achieved by a technique called "stretch processing" [[C
 
 ![FMCW radar principle](/Images/FMCW_schematic_SPIE.png)
 
-There are, however, various engineering difficulties in producing a perfectly linear chirp. Deviations from chirp linearity cause the beat frequency to not be constant, resulting in loss of range resolution and possibly the presence of 'false targets' in the beat spectrum. This distortion is range-dependent, making it difficult to 'disentangle' even if the nature of the chirp nonlinearity is known, as the range is not known a priori.
+There are, however, various engineering difficulties in producing a perfectly linear chirp. Deviations from chirp linearity cause the beat frequency to not be constant, resulting in loss of range resolution and possibly the presence of 'false targets' in the beat spectrum. The distortion is range-dependent, making it difficult to 'disentangle' even if the nature of the chirp nonlinearity is known, as the range is not known a priori.
+
+# The chirp nonlinearity correction algorithm
+If we know the phase error of the transmitted signal - that is, how much the phase deviates from a linear chirp - then it is possible to correct for the effects of chirp nonlinearity by digital post-processing of the IF signal. This algorithm was invented by Meta et al. [[2006](http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=4241255)], although a very similar version of the algorithm was described earlier by Burgos-Garcia et al. [[2003](http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=1182388)].
 
 
