@@ -30,4 +30,19 @@ The resulting signal, sIF2, contains nonlinearities emanating from the received 
 
 In the signal sIF3 at the output of the deskew filter, the nonlinearities emanating from the received signal are time-aligned, but have a slightly different form from the original nonlinearities due to the application of the deskew filter. In the final step of the correction algorithms, these residual phase errors are removed by complex multiplication. In the algorithm of Burgos-Garcia et al., the multiplication is by the complex conjugate of the original phase error, whereas the algorithm of Meta et al. takes into account the skewing of the nonlinearity.
 
+# Results
+The script FMCW_phase_error_correction.py simulates both correction algorithms for an X-band FMCW radar with a carrier frequency of 10 GHz, chirp bandwidth of 50 MHz, and chirp period of 500 us. The target is at a range of 12 km, corresponding to a two-way transit time of 80 us and a beat frequency of 8 GHz. To avoid the fly-back from the previous sweep, only the last 400 us of each sweep is processed; this corresponds to an instrumented range of 15 km.
+
+The phase error is sinusoidal and has the form Asl*cos(2*pi*fsl*t), where Asl is the maximum phase error (in radians) and fsl the sidelobe ripple frequency. For illustration, the maximum phase error is chosen at a large value of Asl = 0.5 radians. Below is shown the resulting beat spectrum for a sidelobe ripple frequency of fsl = 15.8 kHz.
+
+![Results low ripple frequency](/Images/FMCW_sinusoidal_phase_error_low_ripple_frequency.png)
+
+As seen from the plot, the sinusoidal phase errors results in "paired echoes" offset from the ideal beat signal by mutiples of the sidelobe ripple frequency fsl. For this value of fsl, both algorithms work quite well, and the spectrum of the corrected signal is almost indistinguishable from the ideal beat spectrum. (A Hamming window was applied to reduce sidelobes. The spectrum is plotted on a decibel scale referenced to the maximum attainable signal strength without Hamming window.)
+
+As the ripple frequency is increased, the difference between the "narrowband" algorithm of Burgos-Garcia et al. and "wideband" algorithm of Meta et al. becomes apparent. The spectrum below illustrates this for a sidelobe ripple frequency of fsl = 31.6 kHz.
+
+![Results high ripple frequency](/Images/FMCW_sinusoidal_phase_error_high_ripple_frequency.png)
+
+At this increased ripple frequency, the "wideband" algorithm still performs well, whereas the "narrowband" still leaves considerable paired echoes at +-fsl from the target return.
+
 
