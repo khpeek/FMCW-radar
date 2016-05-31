@@ -46,6 +46,23 @@ As the ripple frequency is increased, the difference between the "narrowband" al
 
 At this increased ripple frequency, the "wideband" algorithm still performs well, whereas the "narrowband" still leaves behind paired echoes, which could falsely be interpreted as targets.
 
-To show that the correction algorithm also works for different kinds of phase error,
+#### Cubic phase errors ####
+The correction algorithm also works for different kinds of phase error, such as a cubic one of the form k3/3*t^3. (Note that the time axis is chosen at the middle of the transmitted chirp). The spectrum below illustrates this for a cubic phase error with a maximum frequency error of 7.9 kHz.
 
+![Results cubic phase error](/Images/FMCW_cubic_phase_error.png)
 
+As seen from the figure, the cubic phase error results in a 'blurred' (actually, linearly chirped) beat signal with less range resolution peak signal power. Both algorithms restore resolution and signal power to the ideal response.
+
+#### Quartic phase errors ####
+Finally, the performance of the algorithm for a quartic phase error k4/4*t^4 is shown below. The maximum frequency deviation is the same as for the cubic phase error.
+
+![Results quartic phase error](/Images/FMCW_quartic_phase_error.png)
+
+Besides asymmetric 'blurring' of the point target response, the quartic phase error also results in a range error: the peak of the beat frequency spectrum is at a different location from the ideal response. Again, both algorithms perform well in restoring the response to the ideal.
+
+## Discussion ##
+One of the main advantages of FMCW radars is their "homodyne" architecture - the fact that the transmitted signal is also used as the local oscillator (LO) for down-converting the received signal. In particular, the analog-to-digital converter at the receiver no longer needs to sample the full bandwidth of the received signal, but can suffice with a smaller bandwidth covering the range of beat frequencies expected. This property is an advantage over the matched filter, which - if implemented digitally - would require sampling over the full bandwidth of the received signal.
+
+Conventionally, however, a drawback of FMCW radars has been the requirement of linear chirps. This has led to great engineering effort, for example, linearizing voltage-controlled oscillators (VCOs) and using direct digital synthesizers (DDSs) despite their relatively limited bandwidth and quantization noise. The phase error correction algorithms essentially eliminate this drawback by offering a 'software' method of chirp linearization, albeit at a slightly increase of the computation cost.
+
+In short, the algorithms implemented here promise to greatly increase the applicability of FMCW radars, by giving the possibility to add modulation beyond the linear chirp. This can increase stealth by making it more difficult for radar intercept receivers to estimate the modulation used, or could be used to add communications to radar signals. (This is of interest for FMCW radars in Advanced Driver Assistance Systems (ADAS), since it would allow formations of cars to communicate with each other).
