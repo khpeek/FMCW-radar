@@ -1,5 +1,5 @@
 # FMCW-radar
-Simulation and comparison of two alogrithms to compensate for frequency sweep nonlinearity in Frequency-Modulated Continuous-Wave (FMCW) radars.
+Simulation and comparison of two algorithms for compensating the effects of frequency sweep nonlinearity in Frequency-Modulated Continuous-Wave (FMCW) radars.
 
 ## Introduction ##
 FMCW radars are used for stealth in military applications. Due to their low transmit power (<1 W), they are difficult to detect by radar intercept receivers. By integrating the received signal over time, they achieve  "processing gain" enabling them to detect targets with the same signal-to-noise ratio as pulse radars with peak powers of >100 kW.
