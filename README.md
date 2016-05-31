@@ -22,7 +22,7 @@ Given the phase error of the transmitted signal, it is possible to correct for t
 
 ![Error correction algorithm schematic](/Images/FMCW_phase_error_correction_algorithm.png)
 
-The topmost subplot shows the time-frequency characteristic of the intermediate frequency (IF) signal 'as is', without correction. Both targets deviate from having a constant beat frequency. The deviation consists of two parts: one emanating from the transmitted signal, and one from the received signal. The portion emanating from the transmitted signal is aligned in time, whereas the portion emanating from the received signal is delayed by the two-way transit time to the target, which is not known a priori.
+The topmost subplot shows the time-frequency characteristic of the intermediate frequency (IF) signal 'as is', without correction. Both targets deviate from having a constant beat frequency. The deviation consists of two parts: one resulting from the nonlinearity of the transmitted signal, and one from the received signal. The former is aligned in time, whereas the latter is delayed by the two-way transit time to the target, which is not known *a priori*.
 
 In the first step of the correction algorithm, the distortion from the transmitted signal is removed. This requires the IF signal to be sampled in quadrature, so that it can be represented as a complex exponential, so that phase adjustments can be implemented by (complex) multiplication.
 
