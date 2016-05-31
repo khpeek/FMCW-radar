@@ -2,7 +2,7 @@
 Simulation and comparison of two alogrithms to compensate for frequency sweep nonlinearity in Frequency-Modulated Continuous-Wave (FMCW) radars.
 
 # Introduction
-FMCW radars are used in military applications where it is important to "see without being seen". Due to their low transmit power (<1 W), they are difficult to detect by radar intercept receivers. By integrating the received signal over time, they achieve the  "processing gain" necessary to detect targets with the same signal-to-noise ratio as pulse radars with peak powers of >100 kW.
+FMCW radars are used for stealth in military applications. Due to their low transmit power (<1 W), they are difficult to detect by radar intercept receivers. By integrating the received signal over time, they achieve the  "processing gain" necessary to detect targets with the same signal-to-noise ratio as pulse radars with peak powers of >100 kW.
 
 The "processing gain" is achieved by a technique called "stretch processing" [[Caputi 1971](http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=4103696)]. The received and transmitted signals - which mostly overlap in time - are mixed together produce an "intermediate frequency" (IF) or "beat" signal, the frequency of which is the difference between the frequencies of the transmitted and received signals. Provided that transmitted signal is a linear chirp (that is, a signal whose frequency increases linearly with time), the "beat" frequency for a single target is constant and proportional to the target's range (see below).
 
@@ -22,7 +22,12 @@ Given the phase error of the transmitted signal - that is, how much the phase de
 
 ![Error correction algorithm schematic](/Images/FMCW_phase_error_correction_algorithm.png)
 
-Subplot 1 shows the intermediate frequency (IF) signal 'as is', without any correction. Both targets deviate from having a constant beat frequency. The deviation consists of two parts: one emanating from the transmitted signal, and one from the received signal. In the first step
+Subplot 1 shows the time-frequency characteristic of the intermediate frequency (IF) signal 'as is', without any correction. Both targets deviate from having a constant beat frequency. The deviation consists of two parts: one emanating from the transmitted signal, and one from the received signal. The portion emanating from the transmitted signal is aligned in time, whereas the portion emanating from the received signal is delayed by the two-way transit time to the target, which is not known a priori.
 
+In the first step of the correction algorithm, the distortion from the transmitted signal is removed. This requires the IF signal to be sampled in quadrature, so that it can be represented as a complex exponential, so that phase adjustments can be implemented by (complex) multiplication.
+
+The resulting signal, sIF2, contains nonlinearities emanating from the received signal only. These nonlinearities are 'skewed' in the time-frequency plane, in that phase errors occurring at later times are also modulated onto proportionally higher beat frequencies. The received non-linearities can thus be 're-aligned' by applying a "deskew" filter which implements the reverse skew transformation in the time-frequency plane. (Specifically, the deskew filter has a group delay of -f/alpha, where f is frequency and alpha the nominal chirp rate of the transmitted signal).
+
+In the signal sIF3 at the output of the deskew filter, the nonlinearities emanating from the received signal are time-aligned, but have a slightly different form from the original nonlinearities due to the application of the deskew filter. In the final step of the correction algorithms, these residual phase errors are removed by complex multiplication. In the algorithm of Burgos-Garcia et al., the multiplication is by the complex conjugate of the original phase error, whereas the algorithm of Meta et al. takes into account the skewing of the nonlinearity.
 
 
