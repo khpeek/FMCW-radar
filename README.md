@@ -1,7 +1,7 @@
 # FMCW-radar
 Simulation and comparison of two alogrithms to compensate for frequency sweep nonlinearity in Frequency-Modulated Continuous-Wave (FMCW) radars.
 
-# Introduction
+## Introduction ##
 FMCW radars are used for stealth in military applications. Due to their low transmit power (<1 W), they are difficult to detect by radar intercept receivers. By integrating the received signal over time, they achieve  "processing gain" enabling them to detect targets with the same signal-to-noise ratio as pulse radars with peak powers of >100 kW.
 
 The "processing gain" is achieved by a technique called "stretch processing" [[Caputi 1971](http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=4103696)]. The received and transmitted signals - which mostly overlap in time - are mixed together produce an "intermediate frequency" (IF) or "beat" signal, the frequency of which is the difference between the frequencies of the transmitted and received signals. Provided that transmitted signal is a linear chirp (that is, a signal whose frequency increases linearly with time), the "beat" frequency for a single target is constant and proportional to the target's range (see below).
@@ -10,14 +10,14 @@ The "processing gain" is achieved by a technique called "stretch processing" [[C
 
 There are, however, various engineering difficulties in producing a perfectly linear chirp. Deviations from chirp linearity cause the beat frequency to not be constant, resulting in loss of range resolution and possibly the presence of 'false targets' in the beat spectrum. The distortion is range-dependent, making it difficult to 'disentangle' even if the nature of the chirp nonlinearity is known, as the range is not known a priori.
 
-# The effect of chirp nonlinearity
+## The effect of chirp nonlinearity ##
  To illustrate how the algorithm works, consider the example shown below of the effect of chirp nonlinearity for two targets at different ranges.
 
 ![FMCW schematic](/Images/FMCW_schematic_transmitted_received.png)
 
 In the upper subplot, the green curve represents the time-frequency characteristic of the transmitted signal, which is linear except for a "kink" in the middle. The blue and red dashed curves represent received signals for targets at different ranges, and are simply delayed versions of the transmitted signal. The lower subplot shows time-frequency characteristics of the beat signals for these two targets, and are obtained by taking the difference between the transmitted and respective received time-frequency characteristics. Both deviate from a constant frequency; the deviation is more severe for the more distant target, where the phase errors are more de-correlated.
 
-# The chirp nonlinearity correction algorithm
+## The chirp nonlinearity correction algorithm ##
 Given the phase error of the transmitted signal, it is possible to correct for the effects of chirp nonlinearity in FMCW radar by digital post-processing of the IF signal. The algorithm was invented by Meta et al. [[2006](http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=4241255)], although a very similar version of the algorithm was described earlier by Burgos-Garcia et al. [[2003](http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=1182388)]. The steps of the algorithm are depicted below.
 
 ![Error correction algorithm schematic](/Images/FMCW_phase_error_correction_algorithm.png)
@@ -26,13 +26,14 @@ The topmost subplot shows the time-frequency characteristic of the intermediate 
 
 In the first step of the correction algorithm, the distortion from the transmitted signal is removed. This requires the IF signal to be sampled in quadrature, so that it can be represented as a complex exponential, so that phase adjustments can be implemented by (complex) multiplication.
 
-The resulting signal, sIF2, contains nonlinearities emanating from the received signal only. These nonlinearities are 'skewed' in the time-frequency plane, in that phase errors occurring at later times are also modulated onto proportionally higher beat frequencies. The received non-linearities can thus be 're-aligned' by applying a "deskew" filter which implements the reverse skew transformation in the time-frequency plane. (Specifically, the deskew filter has a group delay of -f/alpha, where f is the frequency and alpha the nominal chirp rate of the transmitted signal).
+The resulting signal, sIF2, contains nonlinearities from the received signal only. These nonlinearities are 'skewed' in the time-frequency plane, in that phase errors occurring at later times are modulated onto proportionally higher beat frequencies. The received nonlinearities can be 're-aligned' in time by applying a "deskew" filter which implements the reverse skew transformation in the time-frequency plane. (Specifically, the deskew filter has a group delay of -f/alpha, where f is the frequency and alpha the nominal chirp rate of the transmitted signal).
 
 In the signal sIF3 at the output of the deskew filter, the nonlinearities emanating from the received signal are time-aligned, but have a slightly different form from the original nonlinearities due to the application of the deskew filter. In the final step of the correction algorithms, these residual phase errors are removed by complex multiplication. In the algorithm of Burgos-Garcia et al., the multiplication is by the complex conjugate of the original phase error, whereas the algorithm of Meta et al. takes into account the skewing of the nonlinearity.
 
-# Results
+## Results ##
 The script FMCW_phase_error_correction.py simulates both correction algorithms for an X-band FMCW radar with a carrier frequency of 10 GHz, chirp bandwidth of 50 MHz, and chirp period of 500 us. The target is at a range of 12 km, corresponding to a two-way transit time of 80 us and a beat frequency of 8 GHz. To avoid the fly-back from the previous sweep, only the last 400 us of each sweep is processed; this corresponds to an instrumented range of 15 km.
 
+#### Sinusoidal phase errors ####
 The phase error is sinusoidal and has the form Asl*cos(2*pi*fsl*t), where Asl is the maximum phase error (in radians) and fsl the sidelobe ripple frequency. For illustration, the maximum phase error is chosen at a large value of Asl = 0.5 radians. Below is shown the resulting beat spectrum for a sidelobe ripple frequency of fsl = 15.8 kHz.
 
 ![Results low ripple frequency](/Images/FMCW_sinusoidal_phase_error_low_ripple_frequency.png)
@@ -43,6 +44,8 @@ As the ripple frequency is increased, the difference between the "narrowband" al
 
 ![Results high ripple frequency](/Images/FMCW_sinusoidal_phase_error_high_ripple_frequency.png)
 
-At this increased ripple frequency, the "wideband" algorithm still performs well, whereas the "narrowband" still leaves considerable paired echoes at +-fsl from the target return.
+At this increased ripple frequency, the "wideband" algorithm still performs well, whereas the "narrowband" still leaves behind paired echoes, which could falsely be interpreted as targets.
+
+To show that the correction algorithm also works for different kinds of phase error,
 
 
