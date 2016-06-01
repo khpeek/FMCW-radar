@@ -1,0 +1,9 @@
+function y=deskew(x,A)
+N=length(x);
+NFFT=2^nextpow2(N+1/abs(A));
+n=0:N-1;
+k=0:NFFT-1;
+X=exp(1j*pi*N*(-1/2+k/NFFT)).*fft(x.*(-1).^n,NFFT);
+Y=X.*exp(1j*pi*(-1/2+k/NFFT).^2/A);
+y=exp(1j*pi*(N/2-k)).*ifft(Y.*exp(-1j*pi*k*N/NFFT),NFFT);
+y=y(1:N);
